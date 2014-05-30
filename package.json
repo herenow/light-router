@@ -25,6 +25,6 @@
   },
   "homepage": "https://github.com/herenow/light-router",
   "devDependencies": {
-    "nodeunit": "^0.9.x"
+    "nodeunit": "*"
   }
 }
