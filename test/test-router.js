@@ -28,7 +28,7 @@ exports.testStaticGetRoute = function(test) {
         test.done()
     })
 
-    TestReqTo('GET', '/home')
+    TestReqTo('GET', '/document')
 }
 
 //Post /document
@@ -41,7 +41,7 @@ exports.testStaticPostRoute = function(test) {
 }
 
 //Head /document
-exports.testStaticPostRoute = function(test) {
+exports.testStaticHeadRoute = function(test) {
     router.head('/document', function(req, res) {
         test.done()
     })
@@ -50,7 +50,7 @@ exports.testStaticPostRoute = function(test) {
 }
 
 //Put /document
-exports.testStaticPostRoute = function(test) {
+exports.testStaticPutRoute = function(test) {
     router.put('/document', function(req, res) {
         test.done()
     })
@@ -59,10 +59,49 @@ exports.testStaticPostRoute = function(test) {
 }
 
 //Delete /document
-exports.testStaticPostRoute = function(test) {
+exports.testStaticDeleteRoute = function(test) {
     router.delete('/document', function(req, res) {
         test.done()
     })
 
     TestReqTo('DELETE', '/document')
+}
+
+//Dynamic routes
+exports.testDynamicRoute = function(test) {
+    router.get('/document/when/:date/set/:tomorrow', function(req, res) {
+        test.expect(2)
+        test.equal(req.parameters.date, '05102014', 'data param did not match')
+        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.done()
+    })
+
+    TestReqTo('GET', '/document/when/05102014/set/06102014')
+}
+
+//Strange dynamic route
+exports.testDynamicRoute2 = function(test) {
+    router.get('/document/:name/:date/set/:tomorrow', function(req, res) {
+        test.expect(3)
+        test.equal(req.parameters.name, 'something', 'data param did not match')
+        test.equal(req.parameters.date, '05102014', 'data param did not match')
+        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.done()
+    })
+
+    TestReqTo('GET', '/document/something/05102014/set/06102014')
+}
+
+//Various dynamic route
+exports.testDynamicRoute3 = function(test) {
+    router.get('/:document/:name/:date/set/:tomorrow', function(req, res) {
+        test.expect(4)
+        test.equal(req.parameters.document, 'shala', 'data param did not match')
+        test.equal(req.parameters.name, 'something', 'data param did not match')
+        test.equal(req.parameters.date, '05102014', 'data param did not match')
+        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.done()
+    })
+
+    TestReqTo('GET', '/shala/something/05102014/set/06102014')
 }
