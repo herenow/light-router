@@ -8,3 +8,8 @@ A light node.js http request router, it doesn't use regexp for matching, thus do
 
 
 **Under development**
+
+##TODO
+- Add cache layer
+- Think about adding regexp
+- Add all http methods to routing table
