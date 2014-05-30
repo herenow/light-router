@@ -1,6 +1,6 @@
 {
   "name": "light-router",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "A light http request router for nodejs",
   "main": "index.js",
   "directories": {
