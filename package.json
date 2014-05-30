@@ -7,17 +7,18 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/.bin/nodeunit test"
+    "test": "node --debug-brk ./node_modules/.bin/nodeunit test"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/herenow/light-router"
   },
   "keywords": [
+    "light-router",
     "router",
     "http-router"
   ],
-  "author": "Me",
+  "author": "herenow",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/herenow/light-router/issues"
