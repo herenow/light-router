@@ -71,8 +71,8 @@ exports.testStaticDeleteRoute = function(test) {
 exports.testDynamicRoute = function(test) {
     router.get('/document/when/:date/set/:tomorrow', function(req, res) {
         test.expect(2)
-        test.equal(req.parameters.date, '05102014', 'data param did not match')
-        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.equal(req.params.date, '05102014', 'data param did not match')
+        test.equal(req.params.tomorrow, '06102014', 'data param did not match')
         test.done()
     })
 
@@ -83,9 +83,9 @@ exports.testDynamicRoute = function(test) {
 exports.testDynamicRoute2 = function(test) {
     router.get('/document/:name/:date/set/:tomorrow', function(req, res) {
         test.expect(3)
-        test.equal(req.parameters.name, 'something', 'data param did not match')
-        test.equal(req.parameters.date, '05102014', 'data param did not match')
-        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.equal(req.params.name, 'something', 'data param did not match')
+        test.equal(req.params.date, '05102014', 'data param did not match')
+        test.equal(req.params.tomorrow, '06102014', 'data param did not match')
         test.done()
     })
 
@@ -96,10 +96,10 @@ exports.testDynamicRoute2 = function(test) {
 exports.testDynamicRoute3 = function(test) {
     router.get('/:document/:name/:date/set/:tomorrow', function(req, res) {
         test.expect(4)
-        test.equal(req.parameters.document, 'shala', 'data param did not match')
-        test.equal(req.parameters.name, 'something', 'data param did not match')
-        test.equal(req.parameters.date, '05102014', 'data param did not match')
-        test.equal(req.parameters.tomorrow, '06102014', 'data param did not match')
+        test.equal(req.params.document, 'shala', 'data param did not match')
+        test.equal(req.params.name, 'something', 'data param did not match')
+        test.equal(req.params.date, '05102014', 'data param did not match')
+        test.equal(req.params.tomorrow, '06102014', 'data param did not match')
         test.done()
     })
 
