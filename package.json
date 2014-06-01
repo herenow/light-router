@@ -1,13 +1,13 @@
 {
   "name": "light-router",
-  "version": "0.0.2",
+  "version": "0.0.211",
   "description": "A light http request router for nodejs",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node --prof ./node_modules/.bin/nodeunit test"
+    "test": "node ./node_modules/.bin/nodeunit test"
   },
   "repository": {
     "type": "git",
