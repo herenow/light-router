@@ -94,14 +94,22 @@ exports.testDynamicRoute2 = function(test) {
 
 //Various dynamic route
 exports.testDynamicRoute3 = function(test) {
-    router.get('/:document/:name/:date/set/:tomorrow', function(req, res) {
-        test.expect(4)
+    router.get('/:document/:name/:date/set', function(req, res) {
+        test.expect(3)
         test.equal(req.params.document, 'shala', 'data param did not match')
         test.equal(req.params.name, 'something', 'data param did not match')
         test.equal(req.params.date, '05102014', 'data param did not match')
-        test.equal(req.params.tomorrow, '06102014', 'data param did not match')
         test.done()
     })
 
-    TestReqTo('GET', '/shala/something/05102014/set/06102014')
+    TestReqTo('GET', '/shala/something/05102014/set')
+}
+
+//Display routing table final
+exports.testRoutingTable = function(test) {
+    var table = router.routingTable()
+
+    //console.log(JSON.stringify(table, 2, "  "))
+
+    test.done()
 }
