@@ -15,7 +15,9 @@ A light node.js http request router, it doesn't use regexp for matching, thus do
 - ~~Think about adding regexp~~
 - ~~Add all http methods to routing table~~
 - ~~Remove url.parse dependencie, this thing is slow as hell!~~
+
 **Tomorrow**
+
 - ~~Implement a faster routing table for dynamic matches~~
 - Write documentation and benchmarks
 - Release alpha version
