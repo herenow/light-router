@@ -109,7 +109,7 @@ exports.testDynamicRoute3 = function(test) {
 exports.testRoutingTable = function(test) {
     var table = router.routingTable()
 
-    //console.log(JSON.stringify(table, 2, "  "))
+    console.log(JSON.stringify(table, 2, "    "))
 
     test.done()
 }
