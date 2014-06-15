@@ -22,3 +22,4 @@ A light node.js http request router, it doesn't use regexp for matching, thus do
 - Write documentation and benchmarks
 - Release alpha version
 - Add optional custom 404 handler
+- Add caching options
