@@ -159,9 +159,30 @@ exports.testRouteNoCache = function(test) {
 exports.testSetCacheMaxSize = function(test) {
     test.expect(1)
 
-    router.cacheMaxSize(10)
+    router.cache.maxSize(100)
 
-    test.equal(router.baseCache.GET.max_size, 10, 'Set cache max size didnt seem to work')
+    test.equal(router.baseCache.GET.max_size, 100, 'Set cache max size didnt seem to work')
+
+    test.done()
+}
+
+
+//Check if cache layer was working
+exports.testCacheLayer = function(test) {
+    test.expect(1)
+
+    test.ok(router.baseCache.GET.size() > 0, 'Cache layer wasnt really working')
+
+    test.done()
+}
+
+//Clear cache table
+exports.testClearCacheTable = function(test) {
+    test.expect(1)
+
+    router.cache.clear()
+
+    test.equal(router.baseCache.GET.size(), 0, 'Cache table did not clear')
 
     test.done()
 }
