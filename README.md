@@ -12,8 +12,9 @@ Most node.js http routers I tested had a really high overhead for a router, and 
 
 Install
 ---------
-`npm install light-router`
-
+```
+npm install light-router
+```
 
 Sample usage
 ---------
@@ -42,7 +43,7 @@ Methods overview
 ------------
 I recommend reading everything if you want to get a general overview of the architecture of this router.
 
-####router[http_verb]\(route, handler)
+####router[method]\(route, handler)
 The following http methods are avaialble: **get, post, put, head, delete, options, trace, connect**
 Writing routes follows the express/rails model. You can write **:param** to extract params from the request url and **:param(regexp)** to create rules for the parameter. **Be careful with the order you declare your routes!**
 
@@ -59,11 +60,22 @@ router.get('/v1/user/:id)', function(req, res) {
 ```
 
 
-####router[http_verb]\(route, handler).cache(boolean)
+####route.cache(boolean)
 Control the caching for this route, you should disable caching for highly dynamic routes.
 
 ```javascript
 router.put('/v1/user/:id', handler).cache(false)
+```
+
+
+####router.notFound(handler)
+Set a custom handler for the 404 not found.
+
+```javascript
+router.notFound(function(req, res) {
+  res.statusCode = 404
+  res.end('Sorry this page was not found :(')
+})
 ```
 
 
