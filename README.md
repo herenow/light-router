@@ -2,24 +2,86 @@ light-router
 ============
 [![Build Status](https://travis-ci.org/herenow/light-router.svg?branch=master)](https://travis-ci.org/herenow/light-router)
 
-A light node.js http request router, it doesn't use regexp for matching, thus doesn't support complex patterns. It aims for performance and a more implicit route declaration model. This module follows a singletone design pattern, see below.
-
-* Note that this router is in an alpha version, I don't guarantee forward compatibility with future versions.
+A router for node.js performance junkies :)
 
 
-- Under development
+Why?
+---------
+Most node.js http routers I tested had a really high overhead for a router, and in some cases it became the bottleneck of really simple API's I wrote. [See benchmarks below](#benchmarks)
+
+
+Install
+---------
+`npm install light-router`
+
+
+Sample usage
+---------
+```javascript
+var router = require('light-router')
+
+router.get('/v1/account/:user', function(req, res) {
+  res.end('Hello, ' + req.params.user)
+})
+```
+
+* Note that this module has a singleton design pattern.
+* The only thing that this router does to the `req` object is attach params.
+
+
+Features
 ----------
+* **Hashtable based** routing
+* **Cache layer** for faster delivery
+* **Cache control** for setting cache max size and disabling cache for some routes
+* **RegExp** for parameter testing
+* **404**, set custom not found handler
 
-##TODO
-- ~~Add cache layer~~
-- ~~Think about adding regexp~~
-- ~~Add all http methods to routing table~~
-- ~~Remove url.parse dependencie, this thing is slow as hell!~~
 
-**Tomorrow**
+Methods overview
+------------
+I recommend reading everything if you want to get a general overview of the architecture of this router.
 
-- ~~Implement a faster routing table for dynamic matches~~
-- Write documentation and benchmarks
-- Release alpha version
-- ~~Add optional custom 404 handler~~
-- ~~Add caching options~~
+####router[http_verb]\(route, handler)
+The following http methods are avaialble: **get, post, put, head, delete, options, trace, connect**
+Writing routes follows the express/rails model. You can write **:param** to extract params from the request url and **:param(regexp)** to create rules for the parameter. **Be careful with the order you declare your routes!**
+
+```javascript
+//Will only match integer userIDs
+router.get('/v1/user/:id([0-9])', function(req, res) {
+  res.end('Your numeric userID is: ' + req.params.id)
+})
+
+//Will only match all other ids that werent numerical only
+router.get('/v1/user/:id)', function(req, res) {
+  res.end('Your userID is: ' + req.params.id)
+})
+```
+
+
+####router[http_verb]\(route, handler).cache(boolean)
+Control the caching for this route, you should disable caching for highly dynamic routes.
+
+```javascript
+router.put('/v1/user/:id', handler).cache(false)
+```
+
+
+####router.cache.maxSize(boolean)
+Set the max cache table size of each http method, by default its set to **10,000**. Each http method has its own cache table, so the total cached routes you can have is: **maxSize * http_verbs**
+
+```javascript
+router.cache.maxSize(10)
+```
+
+####router.cache.clear()
+Clear the cache table, maybe it could be useful :)
+
+```javascript
+router.cache.clear()
+```
+
+
+<a name="benchmarks"></a>Benchmarks
+---------
+TODO:
