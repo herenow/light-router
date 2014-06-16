@@ -21,5 +21,5 @@ A light node.js http request router, it doesn't use regexp for matching, thus do
 - ~~Implement a faster routing table for dynamic matches~~
 - Write documentation and benchmarks
 - Release alpha version
-- Add optional custom 404 handler
-- Add caching options
+- ~~Add optional custom 404 handler~~
+- ~~Add caching options~~
