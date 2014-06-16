@@ -68,7 +68,7 @@ exports.testStaticDeleteRoute = function(test) {
 }
 
 //Dynamic routes
-exports.testDynamicRoute = function(test) {
+exports.testDynamicRouteSimple = function(test) {
     router.get('/document/when/:date/set/:tomorrow', function(req, res) {
         test.expect(2)
         test.equal(req.params.date, '05102014', 'data param did not match')
@@ -80,7 +80,7 @@ exports.testDynamicRoute = function(test) {
 }
 
 //Strange dynamic route
-exports.testDynamicRoute2 = function(test) {
+exports.testDynamicRouteStranger = function(test) {
     router.get('/document/:name/:date/set/:tomorrow', function(req, res) {
         test.expect(3)
         test.equal(req.params.name, 'something', 'data param did not match')
@@ -103,6 +103,35 @@ exports.testDynamicRouteRegExp = function(test) {
     })
 
     TestReqTo('GET', '/shala/something/05102014/set')
+}
+
+//Various dynamic route w/ possible complexitys
+exports.testDynamicRouteComplex = function(test) {
+    test.expect(3)
+
+    router.get('/api/base/:id', function(req, res) {
+        test.equal(req.params.id, '12312', 'data param did not match')
+    })
+    router.get('/api/:name(^john$)/:id', function(req, res) {
+        test.equal(req.params.name, 'john', 'data param did not match')
+    })
+    router.get('/:api/:name/:id', function(req, res) {
+        test.equal(req.params.name, 'lucas', 'data param did not match')
+        test.done()
+    })
+
+    TestReqTo('GET', '/api/base/12312')
+    TestReqTo('GET', '/api/john/12312')
+    TestReqTo('GET', '/something/lucas/12312')
+}
+
+//Test 404
+exports.testNotFound = function(test) {
+    router.notFound(function(req, res) {
+        test.done()
+    })
+
+    TestReqTo('GET', '/this/route/should/not/exist')
 }
 
 //Display routing table final
