@@ -1,5 +1,5 @@
-var tests = require('./test/test-router.js')
-var router = require('./index')
+var tests = require('../test/test-router.js')
+var router = require('../index')
 
 router.get('/path/to', function() { })
 router.get('/path/to/:dyn/:router', function() { })

@@ -85,7 +85,7 @@ router.notFound(function(req, res) {
 
 
 ####router.cache.maxSize(boolean)
-Set the max cache table size of each http method, by default its set to **10,000**. Each http method has its own cache table, so the total cached routes you can have is: **maxSize * http_verbs**
+Set the max cache table size of each http method, by default its set to **100**. Each http method has its own cache table, so the total cached routes you can have is: **maxSize * http_verbs**
 
 ```javascript
 router.cache.maxSize(10)
@@ -311,4 +311,3 @@ Light-router is in an alpha version and it seems to be working fine, it seems to
 Notes:
 * Read the file `lib/router.js` to get a better understanding of how requests are routed to their handlers
 * Complex RegExp are slow, if you can dont use them to much :)
-

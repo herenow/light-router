@@ -9,7 +9,7 @@ var http   = require('http')
  * Simulate an http server
  */
 function TestReqTo(method, path) {
-    router({
+    router.process({
         method: method,
         url: path
     }, {});
@@ -69,8 +69,9 @@ exports.testStaticDeleteRoute = function(test) {
 
 //Dynamic routes
 exports.testDynamicRouteSimple = function(test) {
+    test.expect(2)
+
     router.get('/document/when/:date/set/:tomorrow', function(req, res) {
-        test.expect(2)
         test.equal(req.params.date, '05102014', 'data param did not match')
         test.equal(req.params.tomorrow, '06102014', 'data param did not match')
         test.done()
@@ -81,8 +82,9 @@ exports.testDynamicRouteSimple = function(test) {
 
 //Strange dynamic route
 exports.testDynamicRouteStranger = function(test) {
+    test.expect(3)
+
     router.get('/document/:name/:date/set/:tomorrow', function(req, res) {
-        test.expect(3)
         test.equal(req.params.name, 'something', 'data param did not match')
         test.equal(req.params.date, '05102014', 'data param did not match')
         test.equal(req.params.tomorrow, '06102014', 'data param did not match')
@@ -94,8 +96,9 @@ exports.testDynamicRouteStranger = function(test) {
 
 //Various dynamic route w/ regexp
 exports.testDynamicRouteRegExp = function(test) {
+    test.expect(3)
+
     router.get('/:document/:name/:date(^05102014$)/set', function(req, res) {
-        test.expect(3)
         test.equal(req.params.document, 'shala', 'data param did not match')
         test.equal(req.params.name, 'something', 'data param did not match')
         test.equal(req.params.date, '05102014', 'data param did not match')
@@ -106,23 +109,55 @@ exports.testDynamicRouteRegExp = function(test) {
 }
 
 //Various dynamic route w/ possible complexitys
-exports.testDynamicRouteComplex = function(test) {
-    test.expect(3)
+exports.testDynamicRouteComplexRegexp = function(test) {
+    test.expect(2)
 
     router.get('/api/base/:id', function(req, res) {
         test.equal(req.params.id, '12312', 'data param did not match')
     })
     router.get('/api/:name(^john$)/:id', function(req, res) {
         test.equal(req.params.name, 'john', 'data param did not match')
-    })
-    router.get('/:api/:name/:id', function(req, res) {
-        test.equal(req.params.name, 'lucas', 'data param did not match')
         test.done()
     })
 
     TestReqTo('GET', '/api/base/12312')
     TestReqTo('GET', '/api/john/12312')
-    TestReqTo('GET', '/something/lucas/12312')
+}
+
+//Wild card route
+exports.testWildCardRoutes = function(test) {
+    test.expect(3)
+
+    router.get('/auth/do', function(req, res) {
+        test.ok(true)
+    })
+
+    router.get('/auth/doagain', function(req, res) {
+        test.ok(true)
+    })
+
+    var get = router.get('/auth/*', function(req, res) {
+        test.ok(true)
+        test.done()
+    })
+
+    TestReqTo('GET', '/auth/do')
+    TestReqTo('GET', '/auth/doagain')
+    TestReqTo('GET', '/auth/something/with/this')
+}
+
+//Base path
+exports.testBaseRoute = function(test) {
+    test.expect(1)
+
+    var base = router.base('/account')
+
+    base.get('/login', function(req, res) {
+        test.ok(1)
+        test.done()
+    })
+
+    TestReqTo('GET', '/account/login')
 }
 
 //Test 404
@@ -134,64 +169,11 @@ exports.testNotFound = function(test) {
     TestReqTo('GET', '/this/route/should/not/exist')
 }
 
-//Cache on and off
-exports.testRouteNoCache = function(test) {
-    test.expect(1)
-
-    router.get('/test/cache', function(req, res) {
-    }).cache(false)
-
-    TestReqTo('GET', '/test/cache')
-
-    //Check if a cache entry was created
-    if(typeof router.baseCache.GET.table['test/cache'] === 'undefined') {
-        test.ok(true)
-    }
-    //Error, the cache was created
-    else {
-        test.ok(false, 'A cache entry was actually created')
-    }
-
-    test.done()
-}
-
-//Change cache max size
-exports.testSetCacheMaxSize = function(test) {
-    test.expect(1)
-
-    router.cache.maxSize(100)
-
-    test.equal(router.baseCache.GET.max_size, 100, 'Set cache max size didnt seem to work')
-
-    test.done()
-}
-
-
-//Check if cache layer was working
-exports.testCacheLayer = function(test) {
-    test.expect(1)
-
-    test.ok(router.baseCache.GET.size() > 0, 'Cache layer wasnt really working')
-
-    test.done()
-}
-
-//Clear cache table
-exports.testClearCacheTable = function(test) {
-    test.expect(1)
-
-    router.cache.clear()
-
-    test.equal(router.baseCache.GET.size(), 0, 'Cache table did not clear')
-
-    test.done()
-}
-
 //Display routing table final
 exports.testRoutingTable = function(test) {
     var table = router.routingTable()
 
-    //console.log(JSON.stringify(table, 2, "    "))
+    console.log(JSON.stringify(table, 2, "    "))
 
     test.done()
 }
