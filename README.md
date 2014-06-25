@@ -4,6 +4,10 @@ light-router
 
 A router for node.js performance junkies :)
 
+This router is still under development, and any suggestion would be aprreciated. I'm still figuring out features that should be implemented.
+
+Note that this router is not as flexible as other routers, it is mostly useful for building simple APIs that don't depend on complex middleware schemes.
+
 
 Why?
 ---------
