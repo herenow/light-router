@@ -24,7 +24,6 @@ Sample usage
 ---------
 ```javascript
 var http   = require('http')
-var async  = require('async')
 var router = require('light-router')
 
 //Start an http server and pass all requests to light-router
@@ -34,11 +33,6 @@ http.createServer(router).listen(80)
 router.get('/v1/hello/:user', function(req, res) {
   res.end('Hello, ' + req.params.user)
 })
-
-//Example of a workflow using async
-router.get('/v1/profile', async.waterfall([log_request, auth_user, function(req, res) {
-    res.end('Hello authenticated user :)')
-}])
 ```
 
 * Note that this module has a singleton design pattern.
