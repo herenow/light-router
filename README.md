@@ -24,15 +24,21 @@ Sample usage
 ---------
 ```javascript
 var http   = require('http')
+var async  = require('async')
 var router = require('light-router')
 
 //Start an http server and pass all requests to light-router
 http.createServer(router).listen(80)
 
 //Set a route and its handler fnc
-router.get('/v1/account/:user', function(req, res) {
+router.get('/v1/hello/:user', function(req, res) {
   res.end('Hello, ' + req.params.user)
 })
+
+//Example of a workflow using async
+router.get('/v1/profile', async.waterfall([log_request, auth_user, function(req, res) {
+    res.end('Hello authenticated user :)')
+}])
 ```
 
 * Note that this module has a singleton design pattern.
@@ -315,4 +321,3 @@ Light-router is in an alpha version and it seems to be working fine, it seems to
 Notes:
 * Read the file `lib/router.js` to get a better understanding of how requests are routed to their handlers
 * Complex RegExp are slow, if you can dont use them to much :)
-
