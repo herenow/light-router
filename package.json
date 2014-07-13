@@ -1,6 +1,6 @@
 {
   "name": "light-router",
-  "version": "0.1.11",
+  "version": "0.1.2",
   "description": "A node.js perfomance efficient http router.",
   "main": "index.js",
   "directories": {
@@ -29,6 +29,5 @@
     "nodeunit": "*"
   },
   "dependencies": {
-    "base-cache": "0.0.12"
   }
 }

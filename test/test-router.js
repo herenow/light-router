@@ -134,59 +134,6 @@ exports.testNotFound = function(test) {
     TestReqTo('GET', '/this/route/should/not/exist')
 }
 
-//Cache on and off
-exports.testRouteNoCache = function(test) {
-    test.expect(1)
-
-    router.get('/test/cache', function(req, res) {
-    }).cache(false)
-
-    TestReqTo('GET', '/test/cache')
-
-    //Check if a cache entry was created
-    if(typeof router.baseCache.GET.table['test/cache'] === 'undefined') {
-        test.ok(true)
-    }
-    //Error, the cache was created
-    else {
-        test.ok(false, 'A cache entry was actually created')
-    }
-
-    test.done()
-}
-
-//Change cache max size
-exports.testSetCacheMaxSize = function(test) {
-    test.expect(1)
-
-    router.cache.maxSize(100)
-
-    test.equal(router.baseCache.GET.max_size, 100, 'Set cache max size didnt seem to work')
-
-    test.done()
-}
-
-
-//Check if cache layer was working
-exports.testCacheLayer = function(test) {
-    test.expect(1)
-
-    test.ok(router.baseCache.GET.size() > 0, 'Cache layer wasnt really working')
-
-    test.done()
-}
-
-//Clear cache table
-exports.testClearCacheTable = function(test) {
-    test.expect(1)
-
-    router.cache.clear()
-
-    test.equal(router.baseCache.GET.size(), 0, 'Cache table did not clear')
-
-    test.done()
-}
-
 //Display routing table final
 exports.testRoutingTable = function(test) {
     var table = router.routingTable()

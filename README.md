@@ -4,8 +4,6 @@ light-router
 
 A router for node.js performance junkies :)
 
-This router is still under development, and any suggestion would be aprreciated. I'm still figuring out features that should be implemented.
-
 Note that this router is not as flexible as other routers, it is mostly useful for building simple APIs that don't depend on complex middleware schemes.
 
 
@@ -42,8 +40,6 @@ router.get('/v1/hello/:user', function(req, res) {
 Features
 ----------
 * **Hashtable based** routing
-* **Cache layer** for faster delivery
-* **Cache control** for setting cache max size and disabling cache for some routes
 * **RegExp** for parameter testing
 * **404**, set custom not found handler
 
@@ -69,40 +65,6 @@ router.get('/v1/user/:id)', function(req, res) {
 ```
 
 
-####route.cache(boolean)
-Control the caching for this route, you should disable caching for highly dynamic routes.
-
-```javascript
-router.put('/v1/user/:id', handler).cache(false)
-```
-
-
-####router.notFound(handler)
-Set a custom handler for the 404 not found.
-
-```javascript
-router.notFound(function(req, res) {
-  res.statusCode = 404
-  res.end('Sorry this page was not found :(')
-})
-```
-
-
-####router.cache.maxSize(boolean)
-Set the max cache table size of each http method, by default its set to **10,000**. Each http method has its own cache table, so the total cached routes you can have is: **maxSize * http_verbs**
-
-```javascript
-router.cache.maxSize(10)
-```
-
-####router.cache.clear()
-Clear the cache table, maybe it could be useful :)
-
-```javascript
-router.cache.clear()
-```
-
-
 <a name="benchmarks"></a>Benchmarks
 ---------
 
@@ -124,7 +86,7 @@ Requests/sec:  12108.13
 Transfer/sec:      1.47MB
 ```
 
-**Light-router server (w/ caching)**
+**Light-router server**
 ```javascript
 var router = require('light-router')
 
@@ -141,97 +103,6 @@ router.get('/v1/user/status/:id', respond)
 router.get('/v1/register/status/:id([0-9])', respond)
 router.get('/v1/emails/:provider', respond)
 router.get('/v1/time/:gmt(^\\+[0-9]{1,2}$)', respond)
-```
-```
-$ wrk wrk http://127.0.0.1:2048/v1
-Running 10s test @ http://127.0.0.1:2048/v1
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.86ms  216.85us   6.87ms   72.52%
-    Req/Sec     6.13k     0.95k    9.44k    76.66%
-  115756 requests in 10.00s, 14.02MB read
-Requests/sec:  11575.97
-Transfer/sec:      1.40MB
-
-$ wrk http://127.0.0.1:2048/v1/hello
-Running 10s test @ http://127.0.0.1:2048/v1/hello
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.86ms  209.52us   5.06ms   70.26%
-    Req/Sec     6.11k     1.04k    9.67k    74.84%
-  115478 requests in 10.00s, 13.99MB read
-Requests/sec:  11545.18
-Transfer/sec:      1.40MB
-
-$ wrk http://127.0.0.1:2048/v1/user/123
-Running 10s test @ http://127.0.0.1:2048/v1/user/123
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.94ms  285.31us   6.58ms   73.83%
-    Req/Sec     5.66k     0.97k    8.89k    72.66%
-  107428 requests in 10.00s, 13.01MB read
-Requests/sec:  10743.19
-Transfer/sec:      1.30MB
-
-$ wrk http://127.0.0.1:2048/v1/user/status/123
-Running 10s test @ http://127.0.0.1:2048/v1/user/status/123
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.96ms  312.75us   5.58ms   74.29%
-    Req/Sec     5.58k     1.08k    8.89k    74.76%
-  105655 requests in 10.00s, 12.80MB read
-Requests/sec:  10565.86
-Transfer/sec:      1.28MB
-
-$ wrk http://127.0.0.1:2048/v1/register/status/123
-Running 10s test @ http://127.0.0.1:2048/v1/register/status/123
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.92ms  230.68us   5.54ms   67.34%
-    Req/Sec     5.73k     0.91k    8.78k    71.93%
-  108483 requests in 10.00s, 13.14MB read
-Requests/sec:  10848.77
-Transfer/sec:      1.31MB
-
-$ wrk http://127.0.0.1:2048/v1/emails/gmail
-Running 10s test @ http://127.0.0.1:2048/v1/emails/gmail
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.97ms  324.00us   4.97ms   74.84%
-    Req/Sec     5.54k     1.07k    8.78k    74.24%
-  105006 requests in 10.00s, 12.72MB read
-Requests/sec:  10500.70
-Transfer/sec:      1.27MB
-
-$ wrk http://127.0.0.1:2048/v1/time/+12
-Running 10s test @ http://127.0.0.1:2048/v1/time/+12
-  2 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.86ms  202.36us   4.59ms   70.68%
-    Req/Sec     6.12k     0.93k    9.33k    77.82%
-  115900 requests in 10.00s, 14.04MB read
-Requests/sec:  11590.44
-Transfer/sec:      1.40MB
-```
-
-
-**Light-router server (no caching)**
-```javascript
-var router = require('light-router')
-
-require('http').createServer(router).listen(2048)
-
-function respond(req, res) {
-  res.end('benchmark')
-}
-
-router.get('/v1', respond).cache(false)
-router.get('/v1/hello', respond).cache(false)
-router.get('/v1/user/:id', respond).cache(false)
-router.get('/v1/user/status/:id', respond).cache(false)
-router.get('/v1/register/status/:id([0-9])', respond).cache(false)
-router.get('/v1/emails/:provider', respond).cache(false)
-router.get('/v1/time/:gmt(^\\+[0-9]{1,2}$)', respond).cache(false)
 ```
 ```
 $ wrk http://127.0.0.1:2048/v1
