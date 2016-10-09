@@ -134,6 +134,31 @@ exports.testNotFound = function(test) {
     TestReqTo('GET', '/this/route/should/not/exist')
 }
 
+// Test multiple routes with same params prefix
+// Addresses issue:
+// https://github.com/herenow/light-router/issues/2
+exports.testMultipleRoutesSameParamsPrefix = function(test) {
+    test.expect(6)
+
+    router.get('/multipleRoutesSamePrefix/:id/:second_id/users', function(req, res) {
+        test.equal(req.params.id, 'joana', 'data param did not match')
+        test.equal(req.params.second_id, 'jejezki', 'data param did not match')
+    })
+    router.get('/multipleRoutesSamePrefix/:id/:second_id/places', function(req, res) {
+        test.equal(req.params.id, 'home', 'data param did not match')
+        test.equal(req.params.second_id, 'depot', 'data param did not match')
+    })
+    router.get('/multipleRoutesSamePrefix/:id/:second_id/jobs', function(req, res) {
+        test.equal(req.params.id, 'apple', 'data param did not match')
+        test.equal(req.params.second_id, 'california', 'data param did not match')
+        test.done()
+    })
+
+    TestReqTo('GET', '/multipleRoutesSamePrefix/joana/jejezki/users')
+    TestReqTo('GET', '/multipleRoutesSamePrefix/home/depot/places')
+    TestReqTo('GET', '/multipleRoutesSamePrefix/apple/california/jobs')
+}
+
 //Display routing table final
 exports.testRoutingTable = function(test) {
     var table = router.routingTable()
